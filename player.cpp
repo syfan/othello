@@ -93,14 +93,23 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	}
     std::vector<Move*> possibleMoves = getPossibleMoves(board);
     
+    int best = 0;
+    int best_ind = 0;
 	if (possibleMoves.size() != 0) {
-        int randInd = rand () % possibleMoves.size();
-        newmove = possibleMoves[randInd];
+        for (unsigned int i = 0; i < possibleMoves.size(); i++) {
+			int temp_heur = getHeur(dupboard, possibleMoves[i]);
+			if (temp_heur > best) { 
+				// finding move with best heuristic score
+				best = temp_heur;
+				best_ind = i;
+			}
+		}
+        
+        newmove = possibleMoves[best_ind];
         
 	    board->doMove(newmove, side);
 		dupboard->doMove(newmove, side);
 		return newmove;
     }
-    fprintf(stderr, "GOT HERE\n");
     return nullptr;
 }
