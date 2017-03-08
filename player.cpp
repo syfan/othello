@@ -69,7 +69,7 @@ int Player::getHeur(Board *board, Move *move) {
 		(move->getX() == 7 && move->getY() == 0) ||
 		(move->getX() == 7 && move->getY() == 7) ||
 		(move->getX() == 0 && move->getY() == 7)) {
-			temp = temp * 3;
+			temp = temp * 4;
 	}
 	else if ((move->getX() == 0 &&  move->getY() == 1) ||
 		(move->getX() == 1 && move->getY() == 0) ||
@@ -79,7 +79,17 @@ int Player::getHeur(Board *board, Move *move) {
 		(move->getX() == 7 && move->getY() == 1) ||
 		(move->getX() == 6 && move->getY() == 7) ||
 		(move->getX() == 7 && move->getY() == 6)) {
-			temp = temp * -3;
+			temp = temp * -2;
+	}
+	else if ((move->getX() == 1 &&  move->getY() == 1) ||
+		(move->getX() == 6 && move->getY() == 1) ||
+		(move->getX() == 1 && move->getY() == 6) ||
+		(move->getX() == 6 && move->getY() == 6)) {
+			temp = temp * -4;			
+	}
+	else if (move->getX() == 0 || move->getX() == 7 ||
+		move->getY() == 0 || move->getY() == 7) {
+			temp = temp * 2;
 	}
 	return temp;
 }
