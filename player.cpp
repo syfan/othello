@@ -10,12 +10,18 @@ Player::Player(Side side) {
     testingMinimax = false;
     board = new Board();
     dupboard = new Board();
-    
-    /*
-     * TODO: Do any initialization you need to do here (setting up the board,
-     * precalculating things, etc.) However, remember that you will only have
-     * 30 seconds.
-     */
+    side = side;
+    score = 2;
+    tempscore = 2;
+    if (side == WHITE)
+    {
+		opponentSide = BLACK;
+	}
+	else
+	{
+	    opponentSide = WHITE;	
+	}
+	tempmove = NULL;
 }
 
 /*
@@ -42,5 +48,44 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
      */
+     
+    if (!(opponentsMove == NULL))
+    {
+        board->doMove(opponentsMove, opponentSide);
+		dupboard->doMove(opponentsMove, opponentSide);
+	}
+    for (int i = 0; i < 8; i++)
+    {
+	    for (int j = 0; j < 8; j++)
+		{ 
+		    tempmove = new Move(i,j); 
+			 			 
+			if (board->checkMove(tempmove, side))
+			{
+				dupboard->doMove(tempmove,side);
+				if (side == WHITE)
+				{
+				    tempscore = dupboard->countWhite() - dupboard->countBlack();
+				}
+				else
+				{
+				    tempscore = dupboard->countBlack() - dupboard->countBlack();
+				}
+				
+				if (tempscore > score) // is this move better than others?
+				{
+                    newmove = tempmove;
+				    score = tempscore;
+                }
+				dupboard = board->copy();
+            }			 
+        }
+    }
+	if (!(newmove == NULL))
+	{
+	    board->doMove(newmove, side);
+		dupboard->doMove(newmove, side);
+		return newmove;
+    }
     return nullptr;
 }
