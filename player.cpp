@@ -5,12 +5,12 @@
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish
  * within 30 seconds.
  */
-Player::Player(Side side) {
+Player::Player(Side side1) {
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
     board = new Board();
     dupboard = new Board();
-    side = side;
+    side = side1;
     score = 2;
     tempscore = 2;
     if (side == WHITE)
@@ -44,35 +44,34 @@ Player::~Player() {
  * return nullptr.
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {     
-    if (opponentsMove != NULL) {
+    if (opponentsMove != nullptr) {
+        dupboard->doMove(opponentsMove, opponentSide);
         board->doMove(opponentsMove, opponentSide);
-		dupboard->doMove(opponentsMove, opponentSide);
 	}
     for (int i = 0; i < 8; i++) {
 	    for (int j = 0; j < 8; j++) { 
 		    tempmove = new Move(i,j); 
-            fprintf(stderr, "Got here");
+
 			if (board->checkMove(tempmove, side)) {
 				dupboard->doMove(tempmove,side);
+                
 				if (side == WHITE) {
 				    tempscore = dupboard->countWhite() - dupboard->countBlack();
 				}
 				else {
 				    tempscore = dupboard->countBlack() - dupboard->countBlack();
 				}
-				
-				if (tempscore > score) {// is this move better than others?
-                    newmove = tempmove;
-				    score = tempscore;
-                }
-				dupboard = board->copy();
+                newmove = tempmove;
+                score = tempscore;
+                break;
             }			 
         }
     }
-	if (newmove != NULL) {
+	if (newmove != nullptr) {
 	    board->doMove(newmove, side);
 		dupboard->doMove(newmove, side);
 		return newmove;
     }
+    fprintf(stderr, "GOT HERE\n");
     return nullptr;
 }
