@@ -43,18 +43,16 @@ Player::~Player() {
  * The move returned must be legal; if there are no valid moves for your side,
  * return nullptr.
  */
-Move *Player::doMove(Move *opponentsMove, int msLeft) {     
-    if (opponentsMove != nullptr) {
-        dupboard->doMove(opponentsMove, opponentSide);
-        board->doMove(opponentsMove, opponentSide);
-	}
+
+std::vector<Move*> Player::getPossibleMoves(Board *board) {
+    std::vector<Move*> moves;
     for (int i = 0; i < 8; i++) {
 	    for (int j = 0; j < 8; j++) { 
 		    tempmove = new Move(i,j); 
 
 			if (board->checkMove(tempmove, side)) {
-				dupboard->doMove(tempmove,side);
-                
+				dupboard->doMove(tempmove, side);
+                moves.push_back(tempmove);
 				if (side == WHITE) {
 				    tempscore = dupboard->countWhite() - dupboard->countBlack();
 				}
@@ -63,11 +61,23 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 				}
                 newmove = tempmove;
                 score = tempscore;
-                break;
             }			 
         }
     }
-	if (newmove != nullptr) {
+    return moves;
+}
+ 
+Move *Player::doMove(Move *opponentsMove, int msLeft) {     
+    if (opponentsMove != nullptr) {
+        dupboard->doMove(opponentsMove, opponentSide);
+        board->doMove(opponentsMove, opponentSide);
+	}
+    std::vector<Move*> possibleMoves = getPossibleMoves(board);
+    
+	if (possibleMoves.size() != 0) {
+        int randInd = rand () % possibleMoves.size();
+        newmove = possibleMoves[randInd];
+        
 	    board->doMove(newmove, side);
 		dupboard->doMove(newmove, side);
 		return newmove;
