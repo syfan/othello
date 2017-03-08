@@ -94,7 +94,8 @@ int Player::getHeur(Board *board, Move *move) {
 	return temp;
 }
  
-Move *Player::doMove(Move *opponentsMove, int msLeft) {     
+Move *Player::doMove(Move *opponentsMove, int msLeft) {   
+	// the current AI beats simple player about 85% of the time  
     if (opponentsMove != nullptr) {
         dupboard->doMove(opponentsMove, opponentSide);
         board->doMove(opponentsMove, opponentSide);
