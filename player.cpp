@@ -11,8 +11,6 @@ Player::Player(Side side1) {
     board = new Board();
     dupboard = new Board();
     side = side1;
-    score = 2;
-    tempscore = 2;
     if (side == WHITE)
     {
 		opponentSide = BLACK;
