@@ -43,37 +43,25 @@ Player::~Player() {
  * The move returned must be legal; if there are no valid moves for your side,
  * return nullptr.
  */
-Move *Player::doMove(Move *opponentsMove, int msLeft) {
-    /*
-     * TODO: Implement how moves your AI should play here. You should first
-     * process the opponent's opponents move before calculating your own move
-     */
-     
-    if (!(opponentsMove == NULL))
-    {
+Move *Player::doMove(Move *opponentsMove, int msLeft) {     
+    if (opponentsMove != NULL) {
         board->doMove(opponentsMove, opponentSide);
 		dupboard->doMove(opponentsMove, opponentSide);
 	}
-    for (int i = 0; i < 8; i++)
-    {
-	    for (int j = 0; j < 8; j++)
-		{ 
+    for (int i = 0; i < 8; i++) {
+	    for (int j = 0; j < 8; j++) { 
 		    tempmove = new Move(i,j); 
-			 			 
-			if (board->checkMove(tempmove, side))
-			{
+            fprintf(stderr, "Got here");
+			if (board->checkMove(tempmove, side)) {
 				dupboard->doMove(tempmove,side);
-				if (side == WHITE)
-				{
+				if (side == WHITE) {
 				    tempscore = dupboard->countWhite() - dupboard->countBlack();
 				}
-				else
-				{
+				else {
 				    tempscore = dupboard->countBlack() - dupboard->countBlack();
 				}
 				
-				if (tempscore > score) // is this move better than others?
-				{
+				if (tempscore > score) {// is this move better than others?
                     newmove = tempmove;
 				    score = tempscore;
                 }
@@ -81,8 +69,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
             }			 
         }
     }
-	if (!(newmove == NULL))
-	{
+	if (newmove != NULL) {
 	    board->doMove(newmove, side);
 		dupboard->doMove(newmove, side);
 		return newmove;
