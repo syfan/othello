@@ -53,18 +53,37 @@ std::vector<Move*> Player::getPossibleMoves(Board *board) {
 			if (board->checkMove(tempmove, side)) {
 				dupboard->doMove(tempmove, side);
                 moves.push_back(tempmove);
-				if (side == WHITE) {
-				    tempscore = dupboard->countWhite() - dupboard->countBlack();
-				}
-				else {
-				    tempscore = dupboard->countBlack() - dupboard->countBlack();
-				}
-                newmove = tempmove;
-                score = tempscore;
             }			 
         }
     }
     return moves;
+}
+
+int Player::getHeur(Board *board, Move *move) {
+	int temp = 0;
+	if (side == WHITE) {
+		temp = board->countWhite() - board->countBlack();
+	}
+	else {
+		temp = board->countBlack() - board->countWhite();
+	}
+	if ((move->getX() == 0 &&  move->getY() == 0) ||
+		(move->getX() == 7 && move->getY() == 0) ||
+		(move->getX() == 7 && move->getY() == 7) ||
+		(move->getX() == 0 && move->getY() == 7)) {
+			temp = temp * 3;
+	}
+	else if ((move->getX() == 0 &&  move->getY() == 1) ||
+		(move->getX() == 1 && move->getY() == 0) ||
+		(move->getX() == 0 && move->getY() == 6) ||
+		(move->getX() == 1 && move->getY() == 7) ||
+		(move->getX() == 6 && move->getY() == 0) ||
+		(move->getX() == 7 && move->getY() == 1) ||
+		(move->getX() == 6 && move->getY() == 7) ||
+		(move->getX() == 7 && move->getY() == 6)) {
+			temp = temp * -3;
+	}
+	return temp;
 }
  
 Move *Player::doMove(Move *opponentsMove, int msLeft) {     
