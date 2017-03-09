@@ -42,14 +42,14 @@ Player::~Player() {
  * return nullptr.
  */
 
-std::vector<Move*> Player::getPossibleMoves(Board *board) {
+std::vector<Move*> Player::getPossibleMoves(Board *board1) {
     std::vector<Move*> moves;
     for (int i = 0; i < 8; i++) {
 	    for (int j = 0; j < 8; j++) { 
 		    tempmove = new Move(i,j); 
 
-			if (board->checkMove(tempmove, side)) {
-				dupboard->doMove(tempmove, side);
+			if (board1->checkMove(tempmove, side)) {
+				//board1->doMove(tempmove, side);
                 moves.push_back(tempmove);
             }			 
         }
@@ -57,19 +57,21 @@ std::vector<Move*> Player::getPossibleMoves(Board *board) {
     return moves;
 }
 
-int Player::getHeur(Board *board, Move *move) {
-	int temp = 0;
+int Player::getHeur(Board *board1, Move *move) {
+	int yours, theirs;
 	if (side == WHITE) {
-		temp = board->countWhite() - board->countBlack();
+		yours = board1->countWhite();
+		theirs = board1->countBlack();
 	}
 	else {
-		temp = board->countBlack() - board->countWhite();
+		yours = board1->countBlack();
+		theirs = board1->countWhite();
 	}
 	if ((move->getX() == 0 &&  move->getY() == 0) ||
 		(move->getX() == 7 && move->getY() == 0) ||
 		(move->getX() == 7 && move->getY() == 7) ||
 		(move->getX() == 0 && move->getY() == 7)) {
-			temp = temp * 4;
+			yours = yours * 4;
 	}
 	else if ((move->getX() == 0 &&  move->getY() == 1) ||
 		(move->getX() == 1 && move->getY() == 0) ||
@@ -79,19 +81,19 @@ int Player::getHeur(Board *board, Move *move) {
 		(move->getX() == 7 && move->getY() == 1) ||
 		(move->getX() == 6 && move->getY() == 7) ||
 		(move->getX() == 7 && move->getY() == 6)) {
-			temp = temp * -2;
+			yours = yours * -2;
 	}
 	else if ((move->getX() == 1 &&  move->getY() == 1) ||
 		(move->getX() == 6 && move->getY() == 1) ||
 		(move->getX() == 1 && move->getY() == 6) ||
 		(move->getX() == 6 && move->getY() == 6)) {
-			temp = temp * -4;			
+			yours = yours * -4;			
 	}
 	else if (move->getX() == 0 || move->getX() == 7 ||
 		move->getY() == 0 || move->getY() == 7) {
-			temp = temp * 2;
+			yours = yours * 2;
 	}
-	return temp;
+	return yours - theirs;
 }
  
 Move *Player::doMove(Move *opponentsMove, int msLeft) {   
@@ -102,19 +104,20 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	}
     std::vector<Move*> possibleMoves = getPossibleMoves(board);
     
-    int best = 0;
-    int best_ind = 0;
+    int best = -100000;
+    //int best_ind = 0;
 	if (possibleMoves.size() != 0) {
         for (unsigned int i = 0; i < possibleMoves.size(); i++) {
 			int temp_heur = getHeur(dupboard, possibleMoves[i]);
 			if (temp_heur > best) { 
 				// finding move with best heuristic score
 				best = temp_heur;
-				best_ind = i;
+				//best_ind = i;
+				newmove = possibleMoves[i];
 			}
 		}
         
-        newmove = possibleMoves[best_ind];
+        //newmove = possibleMoves[best_ind];
         
 	    board->doMove(newmove, side);
 		dupboard->doMove(newmove, side);
