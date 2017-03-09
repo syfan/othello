@@ -29,26 +29,16 @@ Player::~Player() {
 }
 
 /*
- * Compute the next move given the opponent's last move. Your AI is
- * expected to keep track of the board on its own. If this is the first move,
- * or if the opponent passed on the last move, then opponentsMove will be
- * nullptr.
- *
- * msLeft represents the time your AI has left for the total game, in
- * milliseconds. doMove() must take no longer than msLeft, or your AI will
- * be disqualified! An msLeft value of -1 indicates no time limit.
- *
- * The move returned must be legal; if there are no valid moves for your side,
- * return nullptr.
+ * Finds all of the legal moves that can be made, given a board and a side.
  */
 
-std::vector<Move*> Player::getPossibleMoves(Board *board1) {
+std::vector<Move*> Player::getPossibleMoves(Board *board1, Side side1) {
     std::vector<Move*> moves;
     for (int i = 0; i < 8; i++) {
 	    for (int j = 0; j < 8; j++) { 
 		    tempmove = new Move(i,j); 
 
-			if (board1->checkMove(tempmove, side)) {
+			if (board1->checkMove(tempmove, side1)) {
                 moves.push_back(tempmove);
             }			 
         }
@@ -56,6 +46,12 @@ std::vector<Move*> Player::getPossibleMoves(Board *board1) {
     return moves;
 }
 
+/*
+ * Returns the heuristic score when given a board and the move that's 
+ * currently being considered.  It accounts for the strategic advantages
+ * in taking corners and edges and disadvantages in giving access to
+ * corners.
+ */
 int Player::getHeur(Board *board1, Move *move) {
 	int yours, theirs;
 	if (side == WHITE) {
@@ -94,14 +90,27 @@ int Player::getHeur(Board *board1, Move *move) {
 	}
 	return yours - theirs;
 }
- 
+
+/*
+ * Compute the next move given the opponent's last move. Your AI is
+ * expected to keep track of the board on its own. If this is the first move,
+ * or if the opponent passed on the last move, then opponentsMove will be
+ * nullptr.
+ *
+ * msLeft represents the time your AI has left for the total game, in
+ * milliseconds. doMove() must take no longer than msLeft, or your AI will
+ * be disqualified! An msLeft value of -1 indicates no time limit.
+ *
+ * The move returned must be legal; if there are no valid moves for your side,
+ * return nullptr.
+ */ 
 Move *Player::doMove(Move *opponentsMove, int msLeft) {   
 	// the current AI beats simple player about 85% of the time  
     if (opponentsMove != nullptr) {
         dupboard->doMove(opponentsMove, opponentSide);
         board->doMove(opponentsMove, opponentSide);
 	}
-    std::vector<Move*> possibleMoves = getPossibleMoves(board);
+    std::vector<Move*> possibleMoves = getPossibleMoves(board, side);
     
     int best = -100000;
 	if (possibleMoves.size() != 0) {

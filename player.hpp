@@ -14,7 +14,7 @@ public:
     ~Player();
 
     Move *doMove(Move *opponentsMove, int msLeft);
-    std::vector<Move*> getPossibleMoves(Board *board);
+    std::vector<Move*> getPossibleMoves(Board *board, Side side1);
     Side side; // to keep track of side
     Side opponentSide;
     
