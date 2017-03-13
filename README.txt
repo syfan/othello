@@ -1,5 +1,8 @@
-Adrian only needed 3 more points to pass, while I needed more.  Thus, Adrian made minor edits and helped with
+Ty: Adrian only needed 3 more points to pass, while I needed more.  Thus, Adrian made minor edits and helped with
 a helper function.  I did the rest.
+
+Adrian: I helped Ty a bit with the helper function as well as the basic functionality of the othello bot, but as he said
+I only need three more points to pass and Ty is a generous soul.
 
 I tried to make the heuristic function as good as I possible could, since we could now get minimax to work properly.
 (My attempt actually made the AI perform worse against SimplePlayer and ConstantTimePlayer, so I undid it.)
