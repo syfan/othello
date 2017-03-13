@@ -88,6 +88,10 @@ int Player::getHeur(Board *board1, Move *move) {
 		move->getY() == 0 || move->getY() == 7) {
 			yours = yours * 2;
 	}
+	else if (move->getX() == 1 || move->getX() == 6 ||
+		move->getY() == 1 || move->getY() == 6) {
+			yours = 0;
+	}
 	return yours - theirs;
 }
 
